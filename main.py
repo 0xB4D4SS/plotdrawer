@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QLineEdit
 from PyQt5.QtGui import QPixmap
 import matplotlib.pyplot as plt
-import numpy as np
+from numpy import *
 
 
 class Example(QWidget):
@@ -34,7 +34,7 @@ class Example(QWidget):
     def onclick(self):
         formula = self.input.text()
         step = 0.1
-        x = np.arange(-10.0, 10.0, step)
+        x = arange(-10.0, 10.0, step)
         print(eval(formula))
         y = eval(formula)
         fig = plt.figure()
