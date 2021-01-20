@@ -6,7 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from numpy import *
 
 
-class Example(QWidget):
+class GUI(QWidget):
 
     def __init__(self):
         super().__init__()
@@ -37,7 +37,7 @@ class Example(QWidget):
 
     def onclick(self):
         formula = self.input.text()
-        if (self.rbtn.isChecked()):
+        if self.rbtn.isChecked():
             x = linspace(-2*pi, 2*pi, 1000)
             y = x
             x, y = meshgrid(x, y)
@@ -46,6 +46,10 @@ class Example(QWidget):
             fig = plt.figure()
             ax = fig.add_subplot(111, projection='3d')
             ax.plot_wireframe(x, y, z)
+            ax.set_xlim3d(-2*pi, 2*pi)
+            ax.set_ylim3d(-2*pi, 2*pi)
+            #should set zlim when plot has break points
+            ax.set_zlim(-5, 5)
 
         else:
             x = linspace(-2*pi, 2*pi, 1000)
@@ -56,12 +60,12 @@ class Example(QWidget):
             plt.ylim(-5, 5)
 
         plt.grid()
-        plt.savefig('plot.png')
         plt.show()
+        plt.savefig('plot.png')
 
 
 if __name__ == '__main__':
 
     app = QApplication(sys.argv)
-    ex = Example()
+    gui = GUI()
     sys.exit(app.exec_())
