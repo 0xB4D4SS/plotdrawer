@@ -32,27 +32,30 @@ class Example(QWidget):
         self.input.move(50, 50)
 
         self.setGeometry(100, 100, 200, 200)
-        self.setWindowTitle('Lab1')
+        self.setWindowTitle('Plotdrawer')
         self.show()
 
     def onclick(self):
         formula = self.input.text()
         if (self.rbtn.isChecked()):
-            x = linspace(-10.0, 10.0)
+            x = linspace(-2*pi, 2*pi, 1000)
             y = x
+            x, y = meshgrid(x, y)
+            print(eval(formula))
             z = eval(formula)
             fig = plt.figure()
             ax = fig.add_subplot(111, projection='3d')
-            ax.plot(x, y, z)
+            ax.plot_wireframe(x, y, z)
 
         else:
-            step = 0.1
-            x = arange(-10.0, 10.0, step)
+            x = linspace(-2*pi, 2*pi, 1000)
             print(eval(formula))
             y = eval(formula)
             fig = plt.figure()
             plt.plot(x, y)
+            plt.ylim(-5, 5)
 
+        plt.grid()
         plt.savefig('plot.png')
         plt.show()
 
