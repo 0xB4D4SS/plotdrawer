@@ -9,6 +9,7 @@ from numpy import *
 class GUI(QWidget):
 
     def __init__(self):
+        # инициализация элементов интерфейса
         super().__init__()
 
         self.btn = QPushButton('Draw plot', self)
@@ -20,7 +21,7 @@ class GUI(QWidget):
         self.initui()
 
     def initui(self):
-
+        # отрисовка элементов интерфейса
         self.btn.move(50, 100)
         self.btn.clicked.connect(self.onclick)
 
@@ -36,27 +37,39 @@ class GUI(QWidget):
         self.show()
 
     def onclick(self):
+        #получаем текст функции для отрисовки
         formula = self.input.text()
+        # 3d случай
         if self.rbtn.isChecked():
-            x = linspace(-2*pi, 2*pi, 1000)
-            y = x
-            x, y = meshgrid(x, y)
+            # задаем функцию неявно (z = f(x,y)) с помощью лямбда выражения
+            f = lambda x, y: eval(formula)
+            # задаем диапазоны x и y
+            xval = linspace(-2*pi, 2*pi, 1000)
+            yval = linspace(-2*pi, 2*pi, 1000)
+            x, y = meshgrid(xval, yval)
+            # дебажный вывод в консоль
             print(eval(formula))
-            z = eval(formula)
+            z = f(x, y)
+            # собсна создаем график
             fig = plt.figure()
             ax = fig.add_subplot(111, projection='3d')
-            ax.plot_wireframe(x, y, z)
-            ax.set_xlim3d(-2*pi, 2*pi)
-            ax.set_ylim3d(-2*pi, 2*pi)
-            #should set zlim when plot has break points
-            ax.set_zlim(-5, 5)
-
+            ax.plot_surface(x, y, z)
+            # границы отрисовки графика
+            ax.set_xlim(-2*pi, 2*pi)
+            ax.set_ylim(-2*pi, 2*pi)
+            # ((y^2)/x до сих пор странно рисуется, в остальном работает)
+            ax.set_zlim(-30, 30)
+        # 2d случай
         else:
+            # выражаем y как функцию от x с помощью лямбда-выражения
+            y = lambda x: eval(formula)
+            # задаем диапазон x
             x = linspace(-2*pi, 2*pi, 1000)
+            # дебажный вывод в консоль
             print(eval(formula))
-            y = eval(formula)
+            # собсна создаем график
             fig = plt.figure()
-            plt.plot(x, y)
+            plt.plot(x, y(x))
             plt.ylim(-5, 5)
 
         plt.grid()
@@ -65,7 +78,7 @@ class GUI(QWidget):
 
 
 if __name__ == '__main__':
-
+    # здесь запускается приложение
     app = QApplication(sys.argv)
     gui = GUI()
     sys.exit(app.exec_())
