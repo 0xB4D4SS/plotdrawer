@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 import matplotlib.pyplot as plt
+from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 from numpy import *
 
@@ -16,7 +17,7 @@ class GUI(QWidget):
         self.rbtn = QRadioButton("draw in 3d", self)
         self.picture = QPixmap('plot.png')
         self.label = QLabel('Input expression:', self)
-        self.input = QLineEdit('', self)
+        self.finput = QLineEdit('', self)
 
         self.initui()
 
@@ -29,23 +30,23 @@ class GUI(QWidget):
 
         self.label.move(50, 30)
 
-        self.input.resize(100, 30)
-        self.input.move(50, 50)
+        self.finput.resize(100, 30)
+        self.finput.move(50, 50)
 
         self.setGeometry(100, 100, 200, 200)
         self.setWindowTitle('Plotdrawer')
         self.show()
 
     def onclick(self):
-        #получаем текст функции для отрисовки
-        formula = self.input.text()
+        # получаем текст функции для отрисовки
+        formula = self.finput.text()
         # 3d случай
         if self.rbtn.isChecked():
             # задаем функцию неявно (z = f(x,y)) с помощью лямбда выражения
             f = lambda x, y: eval(formula)
             # задаем диапазоны x и y
-            xval = linspace(-2*pi, 2*pi, 1000)
-            yval = linspace(-2*pi, 2*pi, 1000)
+            xval = linspace(-2*pi, 2*pi, 500)
+            yval = linspace(-2*pi, 2*pi, 500)
             x, y = meshgrid(xval, yval)
             # дебажный вывод в консоль
             print(eval(formula))
@@ -53,10 +54,8 @@ class GUI(QWidget):
             # собсна создаем график
             fig = plt.figure()
             ax = fig.add_subplot(111, projection='3d')
-            ax.plot_surface(x, y, z)
+            ax.plot_surface(x, y, z, cmap=cm.coolwarm, cstride=30, rstride=30)
             # границы отрисовки графика
-            ax.set_xlim(-2*pi, 2*pi)
-            ax.set_ylim(-2*pi, 2*pi)
             # ((y^2)/x до сих пор странно рисуется, в остальном работает)
             ax.set_zlim(-30, 30)
         # 2d случай
