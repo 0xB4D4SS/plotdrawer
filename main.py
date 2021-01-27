@@ -49,7 +49,7 @@ class GUI(QWidget):
             yval = arange(-6.0, 6.0, step)
             x, y = meshgrid(xval, yval)
             # задаем функцию неявно (z = f(x,y)) с помощью лямбда выражения
-            f = lambda x=0, y=0: eval(formula)
+            f = lambda x, y: eval(formula)
             # if formula.find('x') != -1:
             #     i = -1
             #     for valx in xval:
@@ -99,17 +99,20 @@ class GUI(QWidget):
             # проверяем равенство пределов и значения функции в точке и проверяем нету ли скачка предела в точке
             # если пределы равны или скачка нет - точки разрыва нет, иначе есть
             # до сих пор не рисует sqrt, log и abs
-            k = -1
-            for val in xval:
-                k = k+1
-                x = symbols('x')
-                lim1 = limit(sympify(formula), x, val, dir='-').evalf()
-                lim2 = limit(sympify(formula), x, val, dir='+').evalf()
-                limnext = limit(sympify(formula), x, val-step, dir='+').evalf()
-                if not(lim1-lim2 < step) or not(lim1 - y(val) < step) or not(lim2 - y(val) < step):
-                    xval[k] = nan
-                elif diff([lim2, limnext]) > 20.0:
-                    xval[k] = nan
+            try:
+                k = -1
+                for val in xval:
+                    k = k+1
+                    x = symbols('x')
+                    lim1 = limit(sympify(formula), x, val, dir='-').evalf()
+                    lim2 = limit(sympify(formula), x, val, dir='+').evalf()
+                    limnext = limit(sympify(formula), x, val-step, dir='+').evalf()
+                    if not(lim1-lim2 < step) or not(lim1 - y(val) < step) or not(lim2 - y(val) < step):
+                        xval[k] = nan
+                    elif diff([lim2, limnext]) > 20.0:
+                        xval[k] = nan
+            except:
+                pass
             print(xval)
             # дебажный вывод в консоль
             # print(eval(formula))
