@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QRadioButton, QLabel, QLineEdit
+from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
