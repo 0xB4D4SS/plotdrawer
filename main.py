@@ -2,7 +2,6 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 import matplotlib.pyplot as plt
-from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 from numpy import *
 from sympy import limit, sympify, symbols
@@ -39,6 +38,7 @@ class GUI(QWidget):
         self.show()
 
     def onclick(self):
+        # шаг значений
         step = 0.1
         # получаем текст функции для отрисовки
         formula = self.finput.text()
@@ -48,40 +48,11 @@ class GUI(QWidget):
             xval = arange(-6.0, 6.0, step)
             yval = arange(-6.0, 6.0, step)
             x, y = meshgrid(xval, yval)
-            # задаем функцию неявно (z = f(x,y)) с помощью лямбда выражения
+            # задаем функцию неявно (z = f(x,y)) с помощью лямбда-выражения
             f = lambda x, y: eval(formula)
-            # if formula.find('x') != -1:
-            #     i = -1
-            #     for valx in xval:
-            #         i = i + 1
-            #         xs = symbols('x')
-            #         lim1 = limit(sympify(formula), xs, valx, dir='-').evalf()
-            #         lim2 = limit(sympify(formula), xs, valx, dir='+').evalf()
-            #         limnext = limit(sympify(formula), xs, valx - step, dir='+').evalf()
-            #         currz = f(valx, yval[i])
-            #         if not(lim1 - lim2 < step) or not(lim1 - currz < step) or not(lim2 - currz < step):
-            #             xval[i] = nan
-            #         elif diff([lim2, limnext]) > 20.0:
-            #             xval[i] = nan
-            # if formula.find('y') != -1:
-            #     k = -1
-            #     for valy in yval:
-            #         k = k + 1
-            #         ys = symbols('y')
-            #         lim3 = limit(sympify(formula), ys, valy, dir='-').evalf()
-            #         lim4 = limit(sympify(formula), ys, valy, dir='+').evalf()
-            #         limnext2 = limit(sympify(formula), ys, valy - step, dir='+').evalf()
-            #         currz = f(xval[k], valy)
-            #         if not(lim3 - lim4 < step) or not(lim3 - currz < step) or not(lim4 - currz < step):
-            #             yval[k] = nan
-            #         elif diff([lim4, limnext2]) > 20.0:
-            #             yval[k] = nan
-            # print('x')
-            # print(xval)
-            # print('y')
-            # print(yval)
-            # print(eval(formula))
             z = f(x, y)
+            # дебажный вывод в консоль
+            # print(eval(formula))
             # собсна создаем график
             fig = plt.figure()
             ax = fig.add_subplot(111, projection='3d')
@@ -95,10 +66,9 @@ class GUI(QWidget):
             xval = arange(-6.0, 6.0, step)
             # выражаем y как функцию от x с помощью лямбда-выражения
             y = lambda x: eval(formula)
-            # проверяем функцию на точки разрыва
-            # проверяем равенство пределов и значения функции в точке и проверяем нету ли скачка предела в точке
+            # проверяем функцию на точки разрыва:
+            # проверяем равенство пределов и значения функции в точке и проверяем нет ли скачка предела в точке
             # если пределы равны или скачка нет - точки разрыва нет, иначе есть
-            # до сих пор не рисует sqrt, log и abs
             try:
                 k = -1
                 for val in xval:
@@ -113,7 +83,6 @@ class GUI(QWidget):
                         xval[k] = nan
             except:
                 pass
-            print(xval)
             # дебажный вывод в консоль
             # print(eval(formula))
             # собсна создаем график
@@ -121,9 +90,10 @@ class GUI(QWidget):
             plt.plot(xval, y(xval))
             # пределы отрисовки оси y
             plt.ylim(-5, 5)
-
+        # показываем график юзеру
         plt.grid()
         plt.show()
+        # сохраняем картинку графика
         plt.savefig('plot.png')
 
 
