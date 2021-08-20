@@ -17,6 +17,7 @@ class GUI(QWidget):
         self.rbtn = QRadioButton("draw in 3d", self)
         self.picture = QPixmap('plot.png')
         self.label = QLabel('Input expression:', self)
+        self.infolabel = QLabel('** - возведение в степень', self)
         self.finput = QLineEdit('', self)
 
         self.initui()
@@ -29,6 +30,7 @@ class GUI(QWidget):
         self.rbtn.move(50, 140)
 
         self.label.move(50, 30)
+        self.infolabel.move(20, 170)
 
         self.finput.resize(100, 30)
         self.finput.move(50, 50)
